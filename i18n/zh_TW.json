@@ -1,147 +1,147 @@
 [
   {
     "id": "April",
-    "translation": "April"
+    "translation": "四月"
   },
   {
     "id": "August",
-    "translation": "August"
+    "translation": "八月"
   },
   {
     "id": "December",
-    "translation": "December"
+    "translation": "十二月"
   },
   {
     "id": "February",
-    "translation": "February"
+    "translation": "二月"
   },
   {
     "id": "January",
-    "translation": "January"
+    "translation": "一月"
   },
   {
     "id": "July",
-    "translation": "July"
+    "translation": "七月"
   },
   {
     "id": "June",
-    "translation": "June"
+    "translation": "六月"
   },
   {
     "id": "March",
-    "translation": "March"
+    "translation": "三月"
   },
   {
     "id": "May",
-    "translation": "May"
+    "translation": "五月"
   },
   {
     "id": "November",
-    "translation": "November"
+    "translation": "十一月"
   },
   {
     "id": "October",
-    "translation": "October"
+    "translation": "十月"
   },
   {
     "id": "September",
-    "translation": "September"
+    "translation": "九月"
   },
   {
     "id": "api.admin.file_read_error",
-    "translation": "Error reading log file"
+    "translation": "讀取 log 檔時發生錯誤"
   },
   {
     "id": "api.admin.init.debug",
-    "translation": "Initializing admin api routes"
+    "translation": "初始化管理 api 路徑"
   },
   {
     "id": "api.admin.test_email.body",
-    "translation": "<br/><br/><br/>It appears your Mattermost email is setup correctly!"
+    "translation": "<br/><br/><br/>看起來您的 Mattermost email 設定正確！"
   },
   {
     "id": "api.admin.test_email.subject",
-    "translation": "Mattermost - Testing Email Settings"
+    "translation": "Mattermost - 測試 Email 設定"
   },
   {
     "id": "api.api.init.parsing_templates.debug",
-    "translation": "Parsing server templates at %v"
+    "translation": "解析位於 %v 的伺服器樣板"
   },
   {
     "id": "api.api.init.parsing_templates.error",
-    "translation": "Failed to parse server templates %v"
+    "translation": "解析伺服器樣板 %v 失敗"
   },
   {
     "id": "api.api.render.error",
-    "translation": "Error rendering template %v err=%v"
+    "translation": "樣板 %v 產生失敗 錯誤=%v"
   },
   {
     "id": "api.channel.add_member.added",
-    "translation": "%v added to the channel by %v"
+    "translation": "%v 已由 %v 加入頻道"
   },
   {
     "id": "api.channel.add_member.find_channel.app_error",
-    "translation": "Failed to find channel"
+    "translation": "尋找頻道失敗"
   },
   {
     "id": "api.channel.add_member.find_user.app_error",
-    "translation": "Failed to find user to be added"
+    "translation": "尋找使用者以加入失敗"
   },
   {
     "id": "api.channel.add_member.user_adding.app_error",
-    "translation": "Failed to find user doing the adding"
+    "translation": "新增時尋找使用者失敗"
   },
   {
     "id": "api.channel.add_user.to.channel.failed.app_error",
-    "translation": "Failed to add user to channel"
+    "translation": "新增使用者至頻道失敗"
   },
   {
     "id": "api.channel.add_user_to_channel.deleted.app_error",
-    "translation": "The channel has been archived or deleted"
+    "translation": "頻道已被封存或刪除"
   },
   {
     "id": "api.channel.add_user_to_channel.type.app_error",
-    "translation": "Can not add user to this channel type"
+    "translation": "無法加入使用者至此類型頻道"
   },
   {
     "id": "api.channel.create_channel.direct_channel.app_error",
-    "translation": "Must use createDirectChannel api service for direct message channel creation"
+    "translation": "必須使用 createDirectChannel api 服務來建立直接傳訊頻道"
   },
   {
     "id": "api.channel.create_channel.invalid_character.app_error",
-    "translation": "Invalid character '__' in channel name for non-direct channel"
+    "translation": "在非直接傳訊的頻道發現非法的字元 '__' 於頻道名稱"
   },
   {
     "id": "api.channel.create_default_channels.off_topic",
-    "translation": "Off-Topic"
+    "translation": "閒聊"
   },
   {
     "id": "api.channel.create_default_channels.town_square",
-    "translation": "Town Square"
+    "translation": "公眾大廳"
   },
   {
     "id": "api.channel.create_direct_channel.invalid_user.app_error",
-    "translation": "Invalid other user id "
+    "translation": "非法的其他使用者 id "
   },
   {
     "id": "api.channel.delete_channel.archived",
-    "translation": "%v has archived the channel."
+    "translation": "%v 已封存頻道。"
   },
   {
     "id": "api.channel.delete_channel.cannot.app_error",
-    "translation": "Cannot delete the default channel {{.Channel}}"
+    "translation": "無法刪除預設的頻道 {{.Channel}}"
   },
   {
     "id": "api.channel.delete_channel.deleted.app_error",
-    "translation": "The channel has been archived or deleted"
+    "translation": "頻道已被封存或刪除"
   },
   {
     "id": "api.channel.delete_channel.failed_post.error",
-    "translation": "Failed to post archive message %v"
+    "translation": "無法張貼封存訊息 %v"
   },
   {
     "id": "api.channel.delete_channel.failed_send.app_error",
-    "translation": "Failed to send archive message"
+    "translation": "傳送封存訊息失敗"
   },
   {
     "id": "api.channel.delete_channel.incoming_webhook.error",
@@ -153,7 +153,7 @@
   },
   {
     "id": "api.channel.delete_channel.permissions.app_error",
-    "translation": "You do not have the appropriate permissions"
+    "translation": "您沒有適當的權限"
   },
   {
     "id": "api.channel.get_channel_counts.app_error",
@@ -161,7 +161,7 @@
   },
   {
     "id": "api.channel.get_channel_extra_info.deleted.app_error",
-    "translation": "The channel has been archived or deleted"
+    "translation": "頻道已被封存或刪除"
   },
   {
     "id": "api.channel.get_channel_extra_info.member_limit.app_error",
@@ -177,7 +177,7 @@
   },
   {
     "id": "api.channel.join_channel.permissions.app_error",
-    "translation": "You do not have the appropriate permissions"
+    "translation": "您沒有適當的權限"
   },
   {
     "id": "api.channel.join_channel.post_and_forget",
@@ -193,7 +193,7 @@
   },
   {
     "id": "api.channel.leave.left",
-    "translation": "%v has left the channel."
+    "translation": "%v 已離開頻道。"
   },
   {
     "id": "api.channel.post_update_channel_header_message_and_forget.join_leave.error",
@@ -221,23 +221,23 @@
   },
   {
     "id": "api.channel.remove_member.permissions.app_error",
-    "translation": "You do not have the appropriate permissions "
+    "translation": "您沒有適當的權限 "
   },
   {
     "id": "api.channel.remove_member.unable.app_error",
-    "translation": "Unable to remove user."
+    "translation": "無法刪除使用者。"
   },
   {
     "id": "api.channel.remove_user_from_channel.deleted.app_error",
-    "translation": "The channel has been archived or deleted"
+    "translation": "頻道已被封存或刪除"
   },
   {
     "id": "api.channel.update_channel.deleted.app_error",
-    "translation": "The channel has been archived or deleted"
+    "translation": "頻道已被封存或刪除"
   },
   {
     "id": "api.channel.update_channel.permission.app_error",
-    "translation": "You do not have the appropriate permissions"
+    "translation": "您沒有適當的權限"
   },
   {
     "id": "api.channel.update_channel.tried.app_error",
@@ -309,7 +309,7 @@
   },
   {
     "id": "api.command_echo.hint",
-    "translation": "'message' [delay in seconds]"
+    "translation": "'訊息' [延遲數秒]"
   },
   {
     "id": "api.command_echo.name",
@@ -321,59 +321,59 @@
   },
   {
     "id": "api.command_join.fail.app_error",
-    "translation": "An error occured while joining the channel."
+    "translation": "加入頻道時發生錯誤。"
   },
   {
     "id": "api.command_join.hint",
-    "translation": "[channel-name]"
+    "translation": "[頻道名稱]"
   },
   {
     "id": "api.command_join.list.app_error",
-    "translation": "An error occured while listing channels."
+    "translation": "列表頻道時發生錯誤。"
   },
   {
     "id": "api.command_join.missing.app_error",
-    "translation": "We couldn't find the channel"
+    "translation": "我們找不到頻道"
   },
   {
     "id": "api.command_join.name",
-    "translation": "join"
+    "translation": "加入"
   },
   {
     "id": "api.command_join.success",
-    "translation": "Joined channel."
+    "translation": "已加入頻道。"
   },
   {
     "id": "api.command_logout.desc",
-    "translation": "Logout of Mattermost"
+    "translation": "登出 Mattermost"
   },
   {
     "id": "api.command_logout.name",
-    "translation": "logout"
+    "translation": "登出"
   },
   {
     "id": "api.command_logout.success_message",
-    "translation": "Logging out..."
+    "translation": "登出..."
   },
   {
     "id": "api.command_me.desc",
-    "translation": "Do an action"
+    "translation": "執行動作"
   },
   {
     "id": "api.command_me.hint",
-    "translation": "[message]"
+    "translation": "[訊息]"
   },
   {
     "id": "api.command_me.name",
-    "translation": "me"
+    "translation": "我"
   },
   {
     "id": "api.command_shrug.desc",
-    "translation": "Adds ¯\\_(ツ)_/¯ to your message"
+    "translation": "新增 ¯\\_(ツ)_/¯ 到您的訊息中"
   },
   {
     "id": "api.command_shrug.hint",
-    "translation": "[message]"
+    "translation": "[訊息]"
   },
   {
     "id": "api.command_shrug.name",
@@ -381,11 +381,11 @@
   },
   {
     "id": "api.context.404.app_error",
-    "translation": "Sorry, we could not find the page."
+    "translation": "抱歉，我們無法找到頁面。"
   },
   {
     "id": "api.context.invalid_param.app_error",
-    "translation": "Invalid {{.Name}} parameter"
+    "translation": "不合法的 {{.Name}} 參數"
   },
   {
     "id": "api.context.invalid_team_url.debug",
@@ -405,7 +405,7 @@
   },
   {
     "id": "api.context.permissions.app_error",
-    "translation": "You do not have the appropriate permissions"
+    "translation": "您沒有適當的權限"
   },
   {
     "id": "api.context.session_expired.app_error",
@@ -413,7 +413,7 @@
   },
   {
     "id": "api.context.system_permissions.app_error",
-    "translation": "You do not have the appropriate permissions (system)"
+    "translation": "您沒有適當的權限 (系統)"
   },
   {
     "id": "api.context.token_provided.app_error",
@@ -425,19 +425,19 @@
   },
   {
     "id": "api.export.json.app_error",
-    "translation": "Unable to convert to json"
+    "translation": "無法轉換成 json"
   },
   {
     "id": "api.export.open.app_error",
-    "translation": "Unable to open file"
+    "translation": "無法開啟檔案"
   },
   {
     "id": "api.export.open_dir.app_error",
-    "translation": "Unable to open directory"
+    "translation": "無法開啟目錄"
   },
   {
     "id": "api.export.open_file.app_error",
-    "translation": "Unable to open file for export"
+    "translation": "無法開啟檔案以匯出"
   },
   {
     "id": "api.export.options.create.app_error",
@@ -713,7 +713,7 @@
   },
   {
     "id": "api.post.delete_post.permissions.app_error",
-    "translation": "You do not have the appropriate permissions"
+    "translation": "您沒有適當的權限"
   },
   {
     "id": "api.post.get_out_of_channel_mentions.regex.error",
@@ -721,7 +721,7 @@
   },
   {
     "id": "api.post.get_post.permissions.app_error",
-    "translation": "You do not have the appropriate permissions"
+    "translation": "您沒有適當的權限"
   },
   {
     "id": "api.post.handle_post_events_and_forget.channel.error",
@@ -833,7 +833,7 @@
   },
   {
     "id": "api.post.update_post.permissions.app_error",
-    "translation": "You do not have the appropriate permissions"
+    "translation": "您沒有適當的權限"
   },
   {
     "id": "api.post.update_post.permissions_details.app_error",
@@ -981,7 +981,7 @@
   },
   {
     "id": "api.team.create_team_from_signup.expired_link.app_error",
-    "translation": "The signup link has expired"
+    "translation": "註冊連結已過期"
   },
   {
     "id": "api.team.create_team_from_signup.invalid_link.app_error",
@@ -1077,7 +1077,7 @@
   },
   {
     "id": "api.team.update_team.permissions.app_error",
-    "translation": "You do not have the appropriate permissions"
+    "translation": "您沒有適當的權限"
   },
   {
     "id": "api.templates.email_change_body.info",
@@ -1373,7 +1373,7 @@
   },
   {
     "id": "api.user.create_user.signup_link_expired.app_error",
-    "translation": "The signup link has expired"
+    "translation": "註冊連結已過期"
   },
   {
     "id": "api.user.create_user.signup_link_invalid.app_error",
@@ -1381,7 +1381,7 @@
   },
   {
     "id": "api.user.create_user.team_name.app_error",
-    "translation": "Invalid team name"
+    "translation": "不合法的團隊名稱"
   },
   {
     "id": "api.user.create_user.tutorial.error",
@@ -1525,7 +1525,7 @@
   },
   {
     "id": "api.user.update_active.permissions.app_error",
-    "translation": "You do not have the appropriate permissions"
+    "translation": "您沒有適當的權限"
   },
   {
     "id": "api.user.update_password.context.app_error",
@@ -1557,7 +1557,7 @@
   },
   {
     "id": "api.user.update_roles.permissions.app_error",
-    "translation": "You do not have the appropriate permissions"
+    "translation": "您沒有適當的權限"
   },
   {
     "id": "api.user.update_roles.system_admin_mod.app_error",
@@ -3313,7 +3313,7 @@
   },
   {
     "id": "web.admin_console.title",
-    "translation": "Admin Console"
+    "translation": "管理後台"
   },
   {
     "id": "web.authorize_oauth.disabled.app_error",
@@ -3357,19 +3357,19 @@
   },
   {
     "id": "web.doc.title",
-    "translation": "Documentation"
+    "translation": "文件"
   },
   {
     "id": "web.email_verified.title",
-    "translation": "Email Verified"
+    "translation": "Email 已驗證"
   },
   {
     "id": "web.find_team.title",
-    "translation": "Find Team"
+    "translation": "尋找團隊"
   },
   {
     "id": "web.footer.about",
-    "translation": "About"
+    "translation": "關於"
   },
   {
     "id": "web.footer.help",
@@ -3485,7 +3485,7 @@
   },
   {
     "id": "web.login_with_oauth.invalid_team.app_error",
-    "translation": "Invalid team name"
+    "translation": "不合法的團隊名稱"
   },
   {
     "id": "web.parsing_templates.debug",
@@ -3513,7 +3513,7 @@
   },
   {
     "id": "web.root.home_title",
-    "translation": "Home"
+    "translation": "首頁"
   },
   {
     "id": "web.root.singup_info",
@@ -3521,7 +3521,7 @@
   },
   {
     "id": "web.root.singup_title",
-    "translation": "Signup"
+    "translation": "註冊"
   },
   {
     "id": "web.signup_team_complete.invalid_link.app_error",
@@ -3529,19 +3529,19 @@
   },
   {
     "id": "web.signup_team_complete.link_expired.app_error",
-    "translation": "The signup link has expired"
+    "translation": "註冊連結已過期"
   },
   {
     "id": "web.signup_team_complete.title",
-    "translation": "Complete Team Sign Up"
+    "translation": "完成團隊註冊"
   },
   {
     "id": "web.signup_team_confirm.title",
-    "translation": "Signup Email Sent"
+    "translation": "註冊 Email 已寄出"
   },
   {
     "id": "web.signup_user_complete.link_expired.app_error",
-    "translation": "The signup link has expired"
+    "translation": "註冊連結已過期"
   },
   {
     "id": "web.signup_user_complete.link_invalid.app_error",
@@ -3561,7 +3561,7 @@
   },
   {
     "id": "web.singup_with_oauth.expired_link.app_error",
-    "translation": "The signup link has expired"
+    "translation": "註冊連結已過期"
   },
   {
     "id": "web.singup_with_oauth.invalid_link.app_error",
@@ -3569,7 +3569,7 @@
   },
   {
     "id": "web.singup_with_oauth.invalid_team.app_error",
-    "translation": "Invalid team name"
+    "translation": "不合法的團隊名稱"
   },
   {
     "id": "web.watcher_fail.error",
