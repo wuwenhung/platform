@@ -72,6 +72,12 @@ func main() {
 		loadLicense()
 	}
 
+	if !utils.IsLicensed && len(utils.Cfg.SqlSettings.DataSourceReplicas) > 1 {
+		l4g.Critical(utils.T("store.sql.read_replicas_not_licensed.critical"))
+		time.Sleep(time.Second)
+		panic(fmt.Sprintf(utils.T("store.sql.read_replicas_not_licensed.critical")))
+	}
+
 	if flagRunCmds {
 		runCmds()
 	} else {
@@ -282,7 +288,7 @@ func cmdCreateTeam() {
 		team.DisplayName = flagTeamName
 		team.Name = flagTeamName
 		team.Email = flagEmail
-		team.Type = model.TEAM_INVITE
+		team.Type = model.TEAM_OPEN
 
 		api.CreateTeam(c, team)
 		if c.Err != nil {

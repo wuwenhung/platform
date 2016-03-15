@@ -1,8 +1,17 @@
 // See License.txt for license information.
 
 import BrowserStore from '../stores/browser_store.jsx';
-import TeamStore from '../stores/team_store.jsx';
-import ErrorStore from '../stores/error_store.jsx';
+
+import {browserHistory} from 'react-router';
+
+let translations = {
+    connectionError: 'There appears to be a problem with your internet connection.',
+    unknownError: 'We received an unexpected status code from the server.'
+};
+
+export function setTranslations(messages) {
+    translations = messages;
+}
 
 export function track(category, action, label, property, value) {
     global.window.analytics.track(action, {category, label, property, value});
@@ -23,23 +32,14 @@ function handleError(methodName, xhr, status, err) {
     var msg = '';
 
     if (e) {
-        msg = 'error in ' + methodName + ' msg=' + e.message + ' detail=' + e.detailed_error + ' rid=' + e.request_id;
+        msg = 'method=' + methodName + ' msg=' + e.message + ' detail=' + e.detailed_error + ' rid=' + e.request_id;
     } else {
-        msg = 'error in ' + methodName + ' status=' + status + ' statusCode=' + xhr.status + ' err=' + err;
+        msg = 'method=' + methodName + ' status=' + status + ' statusCode=' + xhr.status + ' err=' + err;
 
         if (xhr.status === 0) {
-            let errorCount = 1;
-            const oldError = ErrorStore.getLastError();
-            let connectError = 'There appears to be a problem with your internet connection';
-
-            if (oldError && oldError.connErrorCount) {
-                errorCount += oldError.connErrorCount;
-                connectError = 'Please check connection, Mattermost unreachable. If issue persists, ask administrator to check WebSocket port.';
-            }
-
-            e = {message: connectError, connErrorCount: errorCount};
+            e = {message: translations.connectionError};
         } else {
-            e = {message: 'We received an unexpected status code from the server (' + xhr.status + ')'};
+            e = {message: translations.unknownError + ' (' + xhr.status + ')'};
         }
     }
 
@@ -50,10 +50,10 @@ function handleError(methodName, xhr, status, err) {
 
     if (xhr.status === 401) {
         if (window.location.href.indexOf('/channels') === 0) {
-            window.location.pathname = '/login?redirect=' + encodeURIComponent(window.location.pathname + window.location.search);
+            browserHistory.push('/login?extra=expired&redirect=' + encodeURIComponent(window.location.pathname + window.location.search));
         } else {
-            var teamURL = window.location.href.split('/channels')[0];
-            window.location.href = teamURL + '/login?redirect=' + encodeURIComponent(window.location.pathname + window.location.search);
+            var teamURL = window.location.pathname.split('/channels')[0];
+            browserHistory.push(teamURL + '/login?extra=expired&redirect=' + encodeURIComponent(window.location.pathname + window.location.search));
         }
     }
 
@@ -75,6 +75,21 @@ export function getTranslations(locale, success, error) {
 export function createTeamFromSignup(teamSignup, success, error) {
     $.ajax({
         url: '/api/v1/teams/create_from_signup',
+        dataType: 'json',
+        contentType: 'application/json',
+        type: 'POST',
+        data: JSON.stringify(teamSignup),
+        success,
+        error: function onError(xhr, status, err) {
+            var e = handleError('createTeamFromSignup', xhr, status, err);
+            error(e);
+        }
+    });
+}
+
+export function createTeamWithLdap(teamSignup, success, error) {
+    $.ajax({
+        url: '/api/v1/teams/create_with_ldap',
         dataType: 'json',
         contentType: 'application/json',
         type: 'POST',
@@ -274,13 +289,17 @@ export function switchToEmail(data, success, error) {
     track('api', 'api_users_switch_to_email');
 }
 
-export function logout() {
+export function logout(success, error) {
     track('api', 'api_users_logout');
-    var currentTeamUrl = TeamStore.getCurrentTeamUrl();
-    BrowserStore.signalLogout();
-    BrowserStore.clear();
-    ErrorStore.storeLastError(null);
-    window.location.href = currentTeamUrl + '/logout';
+    $.ajax({
+        url: '/api/v1/users/logout',
+        type: 'POST',
+        success,
+        error: function onError(xhr, status, err) {
+            var e = handleError('logout', xhr, status, err);
+            error(e);
+        }
+    });
 }
 
 export function loginByEmail(name, email, password, success, error) {
@@ -422,7 +441,7 @@ export function getServerAudits(success, error) {
 }
 
 export function getConfig(success, error) {
-    $.ajax({
+    return $.ajax({
         url: '/api/v1/admin/config',
         dataType: 'json',
         contentType: 'application/json',
@@ -430,6 +449,40 @@ export function getConfig(success, error) {
         success,
         error: function onError(xhr, status, err) {
             var e = handleError('getConfig', xhr, status, err);
+            error(e);
+        }
+    });
+}
+
+export function getAnalytics(name, teamId, success, error) {
+    let url = '/api/v1/admin/analytics/';
+    if (teamId == null) {
+        url += name;
+    } else {
+        url += teamId + '/' + name;
+    }
+    $.ajax({
+        url,
+        dataType: 'json',
+        contentType: 'application/json',
+        type: 'GET',
+        success,
+        error: (xhr, status, err) => {
+            var e = handleError('getSystemAnalytics', xhr, status, err);
+            error(e);
+        }
+    });
+}
+
+export function getClientConfig(success, error) {
+    return $.ajax({
+        url: '/api/v1/admin/client_props',
+        dataType: 'json',
+        contentType: 'application/json',
+        type: 'GET',
+        success,
+        error: function onError(xhr, status, err) {
+            var e = handleError('getClientConfig', xhr, status, err);
             error(e);
         }
     });
@@ -444,20 +497,6 @@ export function getTeamAnalytics(teamId, name, success, error) {
         success,
         error: (xhr, status, err) => {
             var e = handleError('getTeamAnalytics', xhr, status, err);
-            error(e);
-        }
-    });
-}
-
-export function getSystemAnalytics(name, success, error) {
-    $.ajax({
-        url: '/api/v1/admin/analytics/' + name,
-        dataType: 'json',
-        contentType: 'application/json',
-        type: 'GET',
-        success,
-        error: (xhr, status, err) => {
-            var e = handleError('getSystemAnalytics', xhr, status, err);
             error(e);
         }
     });
@@ -516,6 +555,21 @@ export function getAllTeams(success, error) {
         success,
         error: function onError(xhr, status, err) {
             var e = handleError('getAllTeams', xhr, status, err);
+            error(e);
+        }
+    });
+}
+
+export function getMeLoggedIn(success, error) {
+    return $.ajax({
+        cache: false,
+        url: '/api/v1/users/me_logged_in',
+        dataType: 'json',
+        contentType: 'application/json',
+        type: 'GET',
+        success,
+        error: function onError(xhr, status, err) {
+            var e = handleError('getMeLoggedIn', xhr, status, err);
             error(e);
         }
     });
@@ -622,38 +676,6 @@ export function findTeamByName(teamName, success, error) {
         success,
         error: function onError(xhr, status, err) {
             var e = handleError('findTeamByName', xhr, status, err);
-            error(e);
-        }
-    });
-}
-
-export function findTeamsSendEmail(email, success, error) {
-    $.ajax({
-        url: '/api/v1/teams/email_teams',
-        dataType: 'json',
-        contentType: 'application/json',
-        type: 'POST',
-        data: JSON.stringify({email: email}),
-        success,
-        error: function onError(xhr, status, err) {
-            var e = handleError('findTeamsSendEmail', xhr, status, err);
-            error(e);
-        }
-    });
-
-    track('api', 'api_teams_email_teams');
-}
-
-export function findTeams(email, success, error) {
-    $.ajax({
-        url: '/api/v1/teams/find_teams',
-        dataType: 'json',
-        contentType: 'application/json',
-        type: 'POST',
-        data: JSON.stringify({email: email}),
-        success,
-        error: function onError(xhr, status, err) {
-            var e = handleError('findTeams', xhr, status, err);
             error(e);
         }
     });
@@ -827,7 +849,7 @@ export function updateLastViewedAt(channelId, success, error) {
 }
 
 export function getChannels(success, error) {
-    $.ajax({
+    return $.ajax({
         cache: false,
         url: '/api/v1/channels/',
         dataType: 'json',
@@ -893,7 +915,7 @@ export function getChannelExtraInfo(id, memberLimit, success, error) {
         url += '/' + memberLimit;
     }
 
-    $.ajax({
+    return $.ajax({
         url,
         dataType: 'json',
         contentType: 'application/json',
@@ -1010,7 +1032,7 @@ export function getPostsPage(channelId, offset, limit, success, error, complete)
 }
 
 export function getPosts(channelId, since, success, error, complete) {
-    $.ajax({
+    return $.ajax({
         url: '/api/v1/channels/' + channelId + '/posts/' + since,
         dataType: 'json',
         type: 'GET',
@@ -1339,7 +1361,7 @@ export function getStatuses(ids, success, error) {
 }
 
 export function getMyTeam(success, error) {
-    $.ajax({
+    return $.ajax({
         url: '/api/v1/teams/me',
         dataType: 'json',
         type: 'GET',
@@ -1429,7 +1451,7 @@ export function listIncomingHooks(success, error) {
 }
 
 export function getAllPreferences(success, error) {
-    $.ajax({
+    return $.ajax({
         url: '/api/v1/preferences/',
         dataType: 'json',
         type: 'GET',
@@ -1560,4 +1582,69 @@ export function removeLicenseFile(success, error) {
     });
 
     track('api', 'api_license_upload');
+}
+
+export function getClientLicenceConfig(success, error) {
+    return $.ajax({
+        url: '/api/v1/license/client_config',
+        dataType: 'json',
+        contentType: 'application/json',
+        type: 'GET',
+        success,
+        error: function onError(xhr, status, err) {
+            var e = handleError('getClientLicenceConfig', xhr, status, err);
+            error(e);
+        }
+    });
+}
+
+export function getInviteInfo(success, error, id) {
+    $.ajax({
+        url: '/api/v1/teams/get_invite_info',
+        type: 'POST',
+        dataType: 'json',
+        contentType: 'application/json',
+        data: JSON.stringify({invite_id: id}),
+        success,
+        error: function onError(xhr, status, err) {
+            var e = handleError('getInviteInfo', xhr, status, err);
+            if (error) {
+                error(e);
+            }
+        }
+    });
+}
+
+export function verifyEmail(success, error, uid, hid) {
+    $.ajax({
+        url: '/api/v1/users/verify_email',
+        type: 'POST',
+        contentType: 'application/json',
+        dataType: 'text',
+        data: JSON.stringify({uid, hid}),
+        success,
+        error: function onError(xhr, status, err) {
+            var e = handleError('verifyEmail', xhr, status, err);
+            if (error) {
+                error(e);
+            }
+        }
+    });
+}
+
+export function resendVerification(success, error, teamName, email) {
+    $.ajax({
+        url: '/api/v1/users/resend_verification',
+        type: 'POST',
+        contentType: 'application/json',
+        dataType: 'text',
+        data: JSON.stringify({team_name: teamName, email}),
+        success,
+        error: function onError(xhr, status, err) {
+            var e = handleError('resendVerification', xhr, status, err);
+            if (error) {
+                error(e);
+            }
+        }
+    });
 }

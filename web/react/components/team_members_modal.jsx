@@ -3,6 +3,7 @@
 
 import MemberListTeam from './member_list_team.jsx';
 import TeamStore from '../stores/team_store.jsx';
+import * as Utils from '../utils/utils.jsx';
 
 import {FormattedMessage} from 'mm-intl';
 
@@ -12,36 +13,42 @@ export default class TeamMembersModal extends React.Component {
     constructor(props) {
         super(props);
 
-        this.onShow = this.onShow.bind(this);
-    }
+        this.teamChanged = this.teamChanged.bind(this);
 
+        this.state = {
+            team: TeamStore.getCurrent()
+        };
+    }
     componentDidMount() {
         if (this.props.show) {
             this.onShow();
         }
+
+        TeamStore.addChangeListener(this.teamChanged);
     }
 
-    componentDidUpdate(prevProps) {
-        if (this.props.show && !prevProps.show) {
-            this.onShow();
-        }
+    componentWillUnmount() {
+        TeamStore.removeChangeListener(this.teamChanged);
     }
 
-    onShow() {
-        if ($(window).width() > 768) {
-            $(ReactDOM.findDOMNode(this.refs.modalBody)).perfectScrollbar();
-            $(ReactDOM.findDOMNode(this.refs.modalBody)).css('max-height', $(window).height() - 200);
-        } else {
-            $(ReactDOM.findDOMNode(this.refs.modalBody)).css('max-height', $(window).height() - 150);
-        }
+    teamChanged() {
+        this.setState({team: TeamStore.getCurrent()});
     }
 
     render() {
-        const team = TeamStore.getCurrent();
+        let teamDisplayName = '';
+        if (this.state.team) {
+            teamDisplayName = this.state.team.display_name;
+        }
+
+        let maxHeight = 1000;
+        if (Utils.windowHeight() <= 1200) {
+            maxHeight = Utils.windowHeight() - 300;
+        }
 
         return (
             <Modal
-                dialogClassName='team-members-modal'
+                dialogClassName='more-modal'
                 show={this.props.show}
                 onHide={this.props.onHide}
             >
@@ -50,14 +57,12 @@ export default class TeamMembersModal extends React.Component {
                         id='team_member_modal.members'
                         defaultMessage='{team} Members'
                         values={{
-                            team: team.display_name
+                            team: teamDisplayName
                         }}
                     />
                 </Modal.Header>
-                <Modal.Body ref='modalBody'>
-                    <div className='team-member-list'>
-                        <MemberListTeam/>
-                    </div>
+                <Modal.Body>
+                    <MemberListTeam style={{maxHeight}}/>
                 </Modal.Body>
                 <Modal.Footer>
                     <button

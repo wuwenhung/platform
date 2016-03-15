@@ -9,7 +9,7 @@ import PostDeletedModal from './post_deleted_modal.jsx';
 import TutorialTip from './tutorial/tutorial_tip.jsx';
 
 import AppDispatcher from '../dispatcher/app_dispatcher.jsx';
-import * as EventHelpers from '../dispatcher/event_helpers.jsx';
+import * as GlobalActions from '../action_creators/global_actions.jsx';
 import * as Client from '../utils/client.jsx';
 import * as AsyncClient from '../utils/async_client.jsx';
 import * as Utils from '../utils/utils.jsx';
@@ -130,7 +130,7 @@ class CreatePost extends React.Component {
                 post.message,
                 false,
                 (data) => {
-                    PostStore.storeDraft(data.channel_id, null);
+                    PostStore.storeDraft(this.state.channelId, null);
                     this.setState({messageText: '', submitting: false, postError: null, previews: [], serverError: null});
 
                     if (data.goto_location && data.goto_location.length > 0) {
@@ -165,7 +165,7 @@ class CreatePost extends React.Component {
 
         const channel = ChannelStore.get(this.state.channelId);
 
-        EventHelpers.emitUserPostedEvent(post);
+        GlobalActions.emitUserPostedEvent(post);
         this.setState({messageText: '', submitting: false, postError: null, previews: [], serverError: null});
 
         Client.createPost(post, channel,
@@ -177,7 +177,7 @@ class CreatePost extends React.Component {
                 member.last_viewed_at = Date.now();
                 ChannelStore.setChannelMember(member);
 
-                EventHelpers.emitPostRecievedEvent(data);
+                GlobalActions.emitPostRecievedEvent(data);
             },
             (err) => {
                 if (err.id === 'api.post.create_post.root_id.app_error') {
@@ -262,9 +262,7 @@ class CreatePost extends React.Component {
             message = err.message;
         }
 
-        if (clientId === -1) {
-            this.setState({serverError: message});
-        } else {
+        if (clientId !== -1) {
             const draft = PostStore.getDraft(this.state.channelId);
 
             const index = draft.uploadsInProgress.indexOf(clientId);
@@ -274,8 +272,10 @@ class CreatePost extends React.Component {
 
             PostStore.storeDraft(this.state.channelId, draft);
 
-            this.setState({uploadsInProgress: draft.uploadsInProgress, serverError: message});
+            this.setState({uploadsInProgress: draft.uploadsInProgress});
         }
+
+        this.setState({serverError: message});
     }
     removePreview(id) {
         const previews = Object.assign([], this.state.previews);

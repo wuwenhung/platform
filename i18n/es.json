@@ -456,8 +456,8 @@
     "translation": "S3 no está soportado para exportar al almacenamiento local."
   },
   {
-    "id": "api.export.write_file.app_error",
-    "translation": "No se puede escribir al archivo a exportar"
+    "id": "api.file.file_upload.exceeds",
+    "translation": "El archivo excede el tamaño máximo para una imagen."
   },
   {
     "id": "api.file.file_upload.exceeds",
@@ -506,6 +506,22 @@
   {
     "id": "api.file.init.debug",
     "translation": "Inicializando rutas del API para los archivos"
+  },
+  {
+    "id": "api.file.move_file.configured.app_error",
+    "translation": "No ha sido configurado apropiadamente el almacenamiento. Por favor configuralo para utilizar ya sea S3 o almacenamiento local."
+  },
+  {
+    "id": "api.file.move_file.delete_from_s3.app_error",
+    "translation": "No se pudo eliminar el archivo del S3."
+  },
+  {
+    "id": "api.file.move_file.get_from_s3.app_error",
+    "translation": "No se pudo obtener el archivo desde el S3."
+  },
+  {
+    "id": "api.file.move_file.rename.app_error",
+    "translation": "No se pudo mover el archivo localmente."
   },
   {
     "id": "api.file.open_file_write_stream.configured.app_error",
@@ -1113,7 +1129,7 @@
   },
   {
     "id": "api.templates.email_info",
-    "translation": "Si tienes alguna pregunta, escribenos en cualquier momento a: <a href=\"mailto:{{.FeedbackEmail}}\" style=\"text-decoration: none; color:#2389D7;\">{{.FeedbackEmail}}</a>.<br>Los mejores deseos,<br>El Equipo {{.SiteName}}<br>"
+    "translation": "Si tienes alguna pregunta, escribenos en cualquier momento a: <a href=\"mailto:{{.SupportEmail}}\" style=\"text-decoration: none; color:#2389D7;\">{{.SupportEmail}}</a>.<br>Los mejores deseos,<br>El Equipo {{.SiteName}}<br>"
   },
   {
     "id": "api.templates.error.link",
@@ -2408,6 +2424,10 @@
     "translation": "Verificando conexión con la base de datos sql %v"
   },
   {
+    "id": "store.sql.read_replicas_not_licensed.critical",
+    "translation": "La funcionalidad de más de 1 replica ha sido deshabilitada debido a la licencia actual. Por favor contacta a un administrador del sistema para realizar una actualización a la edición Enterprise."
+  },
+  {
     "id": "store.sql.remove_index.critical",
     "translation": "Falla al remover el índice %v"
   },
@@ -2646,6 +2666,10 @@
   {
     "id": "store.sql_channel.update_member.app_error",
     "translation": "Encontramos un error actualizando el miembro del canal"
+  },
+  {
+    "id": "store.sql_command.analytics_command_count.app_error",
+    "translation": "No pudimos contar los comandos de barra"
   },
   {
     "id": "store.sql_command.save.delete.app_error",
@@ -2896,6 +2920,10 @@
     "translation": "No pudimos actualizar la preferencia"
   },
   {
+    "id": "store.sql_session.analytics_session_count.app_error",
+    "translation": "No pudimos contar las sesiones"
+  },
+  {
     "id": "store.sql_session.cleanup_expired_sessions.app_error",
     "translation": "Encontramos un error mientras se eliminaban las sesiones expiradas del usuario"
   },
@@ -2958,6 +2986,10 @@
   {
     "id": "store.sql_system.update.app_error",
     "translation": "Encontramos un error actualizando las propiedades del sistema"
+  },
+  {
+    "id": "store.sql_team.analytics_team_count.app_error",
+    "translation": "No pudimos contar los equipos"
   },
   {
     "id": "store.sql_team.get.find.app_error",
@@ -3368,22 +3400,6 @@
     "translation": "Encontrar Equipo"
   },
   {
-    "id": "web.footer.about",
-    "translation": "Acerca"
-  },
-  {
-    "id": "web.footer.help",
-    "translation": "Ayuda"
-  },
-  {
-    "id": "web.footer.privacy",
-    "translation": "Privacidad"
-  },
-  {
-    "id": "web.footer.terms",
-    "translation": "Términos"
-  },
-  {
     "id": "web.get_access_token.bad_client_id.app_error",
     "translation": "invalid_request: client_id malo"
   },
@@ -3514,10 +3530,6 @@
   {
     "id": "web.root.home_title",
     "translation": "Inicio"
-  },
-  {
-    "id": "web.root.singup_info",
-    "translation": "Todas las comunicaciones del equipo en un sólo lugar, con búsquedas y accesible desde cualquier parte"
   },
   {
     "id": "web.root.singup_title",

@@ -42,12 +42,14 @@ export default {
 
         RECEIVED_MSG: null,
 
-        RECEIVED_TEAM: null,
+        RECEIVED_MY_TEAM: null,
 
         RECEIVED_CONFIG: null,
         RECEIVED_LOGS: null,
         RECEIVED_SERVER_AUDITS: null,
         RECEIVED_ALL_TEAMS: null,
+
+        RECEIVED_LOCALE: null,
 
         SHOW_SEARCH: null,
 
@@ -70,6 +72,26 @@ export default {
         SERVER_ACTION: null,
         VIEW_ACTION: null
     }),
+
+    StatTypes: keyMirror({
+        TOTAL_USERS: null,
+        TOTAL_PUBLIC_CHANNELS: null,
+        TOTAL_PRIVATE_GROUPS: null,
+        TOTAL_POSTS: null,
+        TOTAL_TEAMS: null,
+        TOTAL_FILE_POSTS: null,
+        TOTAL_HASHTAG_POSTS: null,
+        TOTAL_IHOOKS: null,
+        TOTAL_OHOOKS: null,
+        TOTAL_COMMANDS: null,
+        TOTAL_SESSIONS: null,
+        POST_PER_DAY: null,
+        USERS_WITH_POSTS_PER_DAY: null,
+        RECENTLY_ACTIVE_USERS: null,
+        NEWLY_CREATED_USERS: null
+    }),
+    STAT_MAX_ACTIVE_USERS: 20,
+    STAT_MAX_NEW_USERS: 20,
 
     SocketEvents: {
         POSTED: 'posted',
@@ -123,6 +145,7 @@ export default {
     EMAIL_SERVICE: 'email',
     SIGNIN_CHANGE: 'signin_change',
     SIGNIN_VERIFIED: 'verified',
+    SESSION_EXPIRED: 'expired',
     POST_CHUNK_SIZE: 60,
     MAX_POST_CHUNKS: 3,
     POST_FOCUS_CONTEXT_RADIUS: 10,
@@ -247,7 +270,7 @@ export default {
             buttonColor: '#FFFFFF',
             mentionHighlightBg: '#984063',
             mentionHighlightLink: '#A4FFEB',
-            codeTheme: 'solarized_dark'
+            codeTheme: 'solarized-dark'
         },
         windows10: {
             type: 'Windows Dark',
@@ -351,21 +374,6 @@ export default {
             uiName: 'New Message Separator'
         },
         {
-            group: 'linkAndButtonElements',
-            id: 'linkColor',
-            uiName: 'Link Color'
-        },
-        {
-            group: 'linkAndButtonElements',
-            id: 'buttonBg',
-            uiName: 'Button BG'
-        },
-        {
-            group: 'linkAndButtonElements',
-            id: 'buttonColor',
-            uiName: 'Button Text'
-        },
-        {
             group: 'centerChannelElements',
             id: 'mentionHighlightBg',
             uiName: 'Mention Highlight BG'
@@ -381,11 +389,11 @@ export default {
             uiName: 'Code Theme',
             themes: [
                 {
-                    id: 'solarized_dark',
+                    id: 'solarized-dark',
                     uiName: 'Solarized Dark'
                 },
                 {
-                    id: 'solarized_light',
+                    id: 'solarized-light',
                     uiName: 'Solarized Light'
                 },
                 {
@@ -397,6 +405,21 @@ export default {
                     uiName: 'Monokai'
                 }
             ]
+        },
+        {
+            group: 'linkAndButtonElements',
+            id: 'linkColor',
+            uiName: 'Link Color'
+        },
+        {
+            group: 'linkAndButtonElements',
+            id: 'buttonBg',
+            uiName: 'Button BG'
+        },
+        {
+            group: 'linkAndButtonElements',
+            id: 'buttonColor',
+            uiName: 'Button Text'
         }
     ],
     DEFAULT_CODE_THEME: 'github',
@@ -417,6 +440,8 @@ export default {
     Preferences: {
         CATEGORY_DIRECT_CHANNEL_SHOW: 'direct_channel_show',
         CATEGORY_DISPLAY_SETTINGS: 'display_settings',
+        DISPLAY_PREFER_NICKNAME: 'nickname_full_name',
+        DISPLAY_PREFER_FULL_NAME: 'full_name',
         CATEGORY_ADVANCED_SETTINGS: 'advanced_settings',
         TUTORIAL_STEP: 'tutorial_step'
     },

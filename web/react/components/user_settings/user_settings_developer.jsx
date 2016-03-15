@@ -3,7 +3,7 @@
 
 import SettingItemMin from '../setting_item_min.jsx';
 import SettingItemMax from '../setting_item_max.jsx';
-import * as EventHelpers from '../../dispatcher/event_helpers.jsx';
+import * as GlobalActions from '../../action_creators/global_actions.jsx';
 
 import {intlShape, injectIntl, defineMessages, FormattedMessage} from 'mm-intl';
 
@@ -28,7 +28,7 @@ class DeveloperTab extends React.Component {
     }
     register() {
         this.props.closeModal();
-        EventHelpers.showRegisterAppModal();
+        GlobalActions.showRegisterAppModal();
     }
     render() {
         var appSection;
@@ -94,10 +94,12 @@ class DeveloperTab extends React.Component {
                         className='modal-title'
                         ref='title'
                     >
-                        <i
-                            className='modal-back'
-                            onClick={this.props.collapseModal}
-                        />
+                        <div className='modal-back'>
+                            <i
+                                className='fa fa-angle-left'
+                                onClick={this.props.collapseModal}
+                            />
+                        </div>
                         <FormattedMessage
                             id='user.settings.developer.title'
                             defaultMessage='Developer Settings'

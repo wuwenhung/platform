@@ -2,6 +2,7 @@
 // See License.txt for license information.
 
 import * as client from './client.jsx';
+import * as GlobalActions from '../action_creators/global_actions.jsx';
 import AppDispatcher from '../dispatcher/app_dispatcher.jsx';
 import BrowserStore from '../stores/browser_store.jsx';
 import ChannelStore from '../stores/channel_store.jsx';
@@ -11,16 +12,17 @@ import UserStore from '../stores/user_store.jsx';
 import * as utils from './utils.jsx';
 
 import Constants from './constants.jsx';
-var ActionTypes = Constants.ActionTypes;
+const ActionTypes = Constants.ActionTypes;
+const StatTypes = Constants.StatTypes;
 
 // Used to track in progress async calls
-var callTracker = {};
+const callTracker = {};
 
 export function dispatchError(err, method) {
     AppDispatcher.handleServerAction({
         type: ActionTypes.RECEIVED_ERROR,
-        err: err,
-        method: method
+        err,
+        method
     });
 }
 
@@ -43,14 +45,18 @@ function isCallInProgress(callName) {
 
 export function getChannels(checkVersion) {
     if (isCallInProgress('getChannels')) {
-        return;
+        return null;
     }
 
     callTracker.getChannels = utils.getTimestamp();
 
-    client.getChannels(
+    return client.getChannels(
         (data, textStatus, xhr) => {
             callTracker.getChannels = 0;
+
+            if (xhr.status === 304 || !data) {
+                return;
+            }
 
             if (checkVersion) {
                 var serverVersion = xhr.getResponseHeader('X-Version-ID');
@@ -64,10 +70,6 @@ export function getChannels(checkVersion) {
                         console.log('Detected version update refreshing the page'); //eslint-disable-line no-console
                     }
                 }
-            }
-
-            if (xhr.status === 304 || !data) {
-                return;
             }
 
             AppDispatcher.handleServerAction({
@@ -391,36 +393,6 @@ export function getAllTeams() {
     );
 }
 
-export function findTeams(email) {
-    if (isCallInProgress('findTeams_' + email)) {
-        return;
-    }
-
-    var user = UserStore.getCurrentUser();
-    if (user) {
-        callTracker['findTeams_' + email] = utils.getTimestamp();
-        client.findTeams(
-            user.email,
-            function findTeamsSuccess(data, textStatus, xhr) {
-                callTracker['findTeams_' + email] = 0;
-
-                if (xhr.status === 304 || !data) {
-                    return;
-                }
-
-                AppDispatcher.handleServerAction({
-                    type: ActionTypes.RECEIVED_TEAMS,
-                    teams: data
-                });
-            },
-            function findTeamsFailure(err) {
-                callTracker['findTeams_' + email] = 0;
-                dispatchError(err, 'findTeams');
-            }
-        );
-    }
-}
-
 export function search(terms) {
     if (isCallInProgress('search_' + String(terms))) {
         return;
@@ -644,11 +616,11 @@ export function getPostsAfter(postId, offset, numPost) {
 
 export function getMe() {
     if (isCallInProgress('getMe')) {
-        return;
+        return null;
     }
 
     callTracker.getMe = utils.getTimestamp();
-    client.getMe(
+    return client.getMe(
         (data, textStatus, xhr) => {
             callTracker.getMe = 0;
 
@@ -660,6 +632,8 @@ export function getMe() {
                 type: ActionTypes.RECEIVED_ME,
                 me: data
             });
+
+            GlobalActions.newLocalizationSelected(data.locale);
         },
         (err) => {
             callTracker.getMe = 0;
@@ -705,11 +679,11 @@ export function getStatuses() {
 
 export function getMyTeam() {
     if (isCallInProgress('getMyTeam')) {
-        return;
+        return null;
     }
 
     callTracker.getMyTeam = utils.getTimestamp();
-    client.getMyTeam(
+    return client.getMyTeam(
         function getMyTeamSuccess(data, textStatus, xhr) {
             callTracker.getMyTeam = 0;
 
@@ -718,7 +692,7 @@ export function getMyTeam() {
             }
 
             AppDispatcher.handleServerAction({
-                type: ActionTypes.RECEIVED_TEAM,
+                type: ActionTypes.RECEIVED_MY_TEAM,
                 team: data
             });
         },
@@ -787,11 +761,13 @@ export function getSuggestedCommands(command, suggestionId, component) {
             data.forEach((cmd) => {
                 if (('/' + cmd.trigger).indexOf(command) === 0) {
                     let s = '/' + cmd.trigger;
+                    let hint = '';
                     if (cmd.auto_complete_hint && cmd.auto_complete_hint.length !== 0) {
-                        s += ' ' + cmd.auto_complete_hint;
+                        hint = cmd.auto_complete_hint;
                     }
                     matches.push({
                         suggestion: s,
+                        hint,
                         description: cmd.auto_complete_desc
                     });
                 }
@@ -843,6 +819,267 @@ export function getFileInfo(filename) {
             callTracker[callName] = 0;
 
             dispatchError(err, 'getFileInfo');
+        }
+    );
+}
+
+export function getStandardAnalytics(teamId) {
+    const callName = 'getStandardAnaytics' + teamId;
+
+    if (isCallInProgress(callName)) {
+        return;
+    }
+
+    callTracker[callName] = utils.getTimestamp();
+
+    client.getAnalytics(
+        'standard',
+        teamId,
+        (data) => {
+            callTracker[callName] = 0;
+
+            const stats = {};
+
+            for (const index in data) {
+                if (data[index].name === 'channel_open_count') {
+                    stats[StatTypes.TOTAL_PUBLIC_CHANNELS] = data[index].value;
+                }
+
+                if (data[index].name === 'channel_private_count') {
+                    stats[StatTypes.TOTAL_PRIVATE_GROUPS] = data[index].value;
+                }
+
+                if (data[index].name === 'post_count') {
+                    stats[StatTypes.TOTAL_POSTS] = data[index].value;
+                }
+
+                if (data[index].name === 'unique_user_count') {
+                    stats[StatTypes.TOTAL_USERS] = data[index].value;
+                }
+
+                if (data[index].name === 'team_count' && teamId == null) {
+                    stats[StatTypes.TOTAL_TEAMS] = data[index].value;
+                }
+            }
+
+            AppDispatcher.handleServerAction({
+                type: ActionTypes.RECEIVED_ANALYTICS,
+                teamId,
+                stats
+            });
+        },
+        (err) => {
+            callTracker[callName] = 0;
+
+            dispatchError(err, 'getStandardAnalytics');
+        }
+    );
+}
+
+export function getAdvancedAnalytics(teamId) {
+    const callName = 'getAdvancedAnalytics' + teamId;
+
+    if (isCallInProgress(callName)) {
+        return;
+    }
+
+    callTracker[callName] = utils.getTimestamp();
+
+    client.getAnalytics(
+        'extra_counts',
+        teamId,
+        (data) => {
+            callTracker[callName] = 0;
+
+            const stats = {};
+
+            for (const index in data) {
+                if (data[index].name === 'file_post_count') {
+                    stats[StatTypes.TOTAL_FILE_POSTS] = data[index].value;
+                }
+
+                if (data[index].name === 'hashtag_post_count') {
+                    stats[StatTypes.TOTAL_HASHTAG_POSTS] = data[index].value;
+                }
+
+                if (data[index].name === 'incoming_webhook_count') {
+                    stats[StatTypes.TOTAL_IHOOKS] = data[index].value;
+                }
+
+                if (data[index].name === 'outgoing_webhook_count') {
+                    stats[StatTypes.TOTAL_OHOOKS] = data[index].value;
+                }
+
+                if (data[index].name === 'command_count') {
+                    stats[StatTypes.TOTAL_COMMANDS] = data[index].value;
+                }
+
+                if (data[index].name === 'session_count') {
+                    stats[StatTypes.TOTAL_SESSIONS] = data[index].value;
+                }
+            }
+
+            AppDispatcher.handleServerAction({
+                type: ActionTypes.RECEIVED_ANALYTICS,
+                teamId,
+                stats
+            });
+        },
+        (err) => {
+            callTracker[callName] = 0;
+
+            dispatchError(err, 'getAdvancedAnalytics');
+        }
+    );
+}
+
+export function getPostsPerDayAnalytics(teamId) {
+    const callName = 'getPostsPerDayAnalytics' + teamId;
+
+    if (isCallInProgress(callName)) {
+        return;
+    }
+
+    callTracker[callName] = utils.getTimestamp();
+
+    client.getAnalytics(
+        'post_counts_day',
+        teamId,
+        (data) => {
+            callTracker[callName] = 0;
+
+            data.reverse();
+
+            const stats = {};
+            stats[StatTypes.POST_PER_DAY] = data;
+
+            AppDispatcher.handleServerAction({
+                type: ActionTypes.RECEIVED_ANALYTICS,
+                teamId,
+                stats
+            });
+        },
+        (err) => {
+            callTracker[callName] = 0;
+
+            dispatchError(err, 'getPostsPerDayAnalytics');
+        }
+    );
+}
+
+export function getUsersPerDayAnalytics(teamId) {
+    const callName = 'getUsersPerDayAnalytics' + teamId;
+
+    if (isCallInProgress(callName)) {
+        return;
+    }
+
+    callTracker[callName] = utils.getTimestamp();
+
+    client.getAnalytics(
+        'user_counts_with_posts_day',
+        teamId,
+        (data) => {
+            callTracker[callName] = 0;
+
+            data.reverse();
+
+            const stats = {};
+            stats[StatTypes.USERS_WITH_POSTS_PER_DAY] = data;
+
+            AppDispatcher.handleServerAction({
+                type: ActionTypes.RECEIVED_ANALYTICS,
+                teamId,
+                stats
+            });
+        },
+        (err) => {
+            callTracker[callName] = 0;
+
+            dispatchError(err, 'getUsersPerDayAnalytics');
+        }
+    );
+}
+
+export function getRecentAndNewUsersAnalytics(teamId) {
+    const callName = 'getRecentAndNewUsersAnalytics' + teamId;
+
+    if (isCallInProgress(callName)) {
+        return;
+    }
+
+    callTracker[callName] = utils.getTimestamp();
+
+    client.getProfilesForTeam(
+        teamId,
+        (users) => {
+            const stats = {};
+
+            const usersList = [];
+            for (const id in users) {
+                if (users.hasOwnProperty(id)) {
+                    usersList.push(users[id]);
+                }
+            }
+
+            usersList.sort((a, b) => {
+                if (a.last_activity_at < b.last_activity_at) {
+                    return 1;
+                }
+
+                if (a.last_activity_at > b.last_activity_at) {
+                    return -1;
+                }
+
+                return 0;
+            });
+
+            const recentActive = [];
+            for (let i = 0; i < usersList.length; i++) {
+                if (usersList[i].last_activity_at == null) {
+                    continue;
+                }
+
+                recentActive.push(usersList[i]);
+                if (i >= Constants.STAT_MAX_ACTIVE_USERS) {
+                    break;
+                }
+            }
+
+            stats[StatTypes.RECENTLY_ACTIVE_USERS] = recentActive;
+
+            usersList.sort((a, b) => {
+                if (a.create_at < b.create_at) {
+                    return 1;
+                }
+
+                if (a.create_at > b.create_at) {
+                    return -1;
+                }
+
+                return 0;
+            });
+
+            var newlyCreated = [];
+            for (let i = 0; i < usersList.length; i++) {
+                newlyCreated.push(usersList[i]);
+                if (i >= Constants.STAT_MAX_NEW_USERS) {
+                    break;
+                }
+            }
+
+            stats[StatTypes.NEWLY_CREATED_USERS] = newlyCreated;
+
+            AppDispatcher.handleServerAction({
+                type: ActionTypes.RECEIVED_ANALYTICS,
+                teamId,
+                stats
+            });
+        },
+        (err) => {
+            callTracker[callName] = 0;
+
+            dispatchError(err, 'getRecentAndNewUsersAnalytics');
         }
     );
 }

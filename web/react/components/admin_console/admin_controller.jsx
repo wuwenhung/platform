@@ -6,7 +6,6 @@ import AdminStore from '../../stores/admin_store.jsx';
 import TeamStore from '../../stores/team_store.jsx';
 import * as AsyncClient from '../../utils/async_client.jsx';
 import LoadingScreen from '../loading_screen.jsx';
-import * as Utils from '../../utils/utils.jsx';
 
 import EmailSettingsTab from './email_settings.jsx';
 import LogSettingsTab from './log_settings.jsx';
@@ -21,10 +20,10 @@ import TeamSettingsTab from './team_settings.jsx';
 import ServiceSettingsTab from './service_settings.jsx';
 import LegalAndSupportSettingsTab from './legal_and_support_settings.jsx';
 import TeamUsersTab from './team_users.jsx';
-import TeamAnalyticsTab from './team_analytics.jsx';
+import TeamAnalyticsTab from '../analytics/team_analytics.jsx';
 import LdapSettingsTab from './ldap_settings.jsx';
 import LicenseSettingsTab from './license_settings.jsx';
-import SystemAnalyticsTab from './system_analytics.jsx';
+import SystemAnalyticsTab from '../analytics/system_analytics.jsx';
 
 export default class AdminController extends React.Component {
     constructor(props) {
@@ -50,11 +49,6 @@ export default class AdminController extends React.Component {
             selected: props.tab || 'system_analytics',
             selectedTeam: props.teamId || null
         };
-
-        if (!props.tab) {
-            var tokenIndex = Utils.getUrlParameter('session_token_index');
-            history.replaceState(null, null, `/admin_console/${this.state.selected}?session_token_index=${tokenIndex}`);
-        }
     }
 
     componentDidMount() {
@@ -63,6 +57,9 @@ export default class AdminController extends React.Component {
 
         AdminStore.addAllTeamsChangeListener(this.onAllTeamsListenerChange);
         AsyncClient.getAllTeams();
+
+        $('[data-toggle="tooltip"]').tooltip();
+        $('[data-toggle="popover"]').popover();
     }
 
     componentWillUnmount() {
@@ -175,7 +172,7 @@ export default class AdminController extends React.Component {
         }
 
         return (
-            <div>
+            <div id='admin_controller'>
                 <div
                     className='sidebar--menu'
                     id='sidebar-menu'
