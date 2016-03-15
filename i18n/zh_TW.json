@@ -145,11 +145,11 @@
   },
   {
     "id": "api.channel.delete_channel.incoming_webhook.error",
-    "translation": "Encountered error deleting incoming webhook, id=%v"
+    "translation": "刪除 incoming webhook 發生錯誤，id=%v"
   },
   {
     "id": "api.channel.delete_channel.outgoing_webhook.error",
-    "translation": "Encountered error deleting outgoing webhook, id=%v"
+    "translation": "刪除 outgoing webhook 發生錯誤，id=%v"
   },
   {
     "id": "api.channel.delete_channel.permissions.app_error",
@@ -157,7 +157,7 @@
   },
   {
     "id": "api.channel.get_channel_counts.app_error",
-    "translation": "Unable to get channel counts from the database"
+    "translation": "無法從資料庫取得頻道數量"
   },
   {
     "id": "api.channel.get_channel_extra_info.deleted.app_error",
@@ -165,15 +165,15 @@
   },
   {
     "id": "api.channel.get_channel_extra_info.member_limit.app_error",
-    "translation": "Failed to parse member limit"
+    "translation": "解析成員限制失敗"
   },
   {
     "id": "api.channel.get_channels.error",
-    "translation": "Error in getting users profile for id=%v forcing logout"
+    "translation": "取得使用者 id=%v 資訊發生錯誤，強制登出"
   },
   {
     "id": "api.channel.init.debug",
-    "translation": "Initializing channel api routes"
+    "translation": "正在初始化頻道 api 路徑"
   },
   {
     "id": "api.channel.join_channel.permissions.app_error",
@@ -181,15 +181,15 @@
   },
   {
     "id": "api.channel.join_channel.post_and_forget",
-    "translation": "%v has joined the channel."
+    "translation": "%v 已加入頻道。"
   },
   {
     "id": "api.channel.leave.default.app_error",
-    "translation": "Cannot leave the default channel {{.Channel}}"
+    "translation": "無法離開預設的頻道 {{.Channel}}"
   },
   {
     "id": "api.channel.leave.direct.app_error",
-    "translation": "Cannot leave a direct message channel"
+    "translation": "無法離開直接傳訊頻道"
   },
   {
     "id": "api.channel.leave.left",
@@ -197,27 +197,27 @@
   },
   {
     "id": "api.channel.post_update_channel_header_message_and_forget.join_leave.error",
-    "translation": "Failed to post join/leave message %v"
+    "translation": "張貼加入/離開訊息 %v 失敗"
   },
   {
     "id": "api.channel.post_update_channel_header_message_and_forget.removed",
-    "translation": "%s removed the channel header (was: %s)"
+    "translation": "%s 已移除了頻道標題 (原為： %s)"
   },
   {
     "id": "api.channel.post_update_channel_header_message_and_forget.retrieve_user.error",
-    "translation": "Failed to retrieve user while trying to save update channel header message %v"
+    "translation": "嘗試儲存更新的頻道標題訊息時取得使用者資訊失敗 %v"
   },
   {
     "id": "api.channel.post_update_channel_header_message_and_forget.updated_from",
-    "translation": "%s updated the channel header from: %s to: %s"
+    "translation": "%s 將原頻道標題 %s 改為：%s"
   },
   {
     "id": "api.channel.post_update_channel_header_message_and_forget.updated_to",
-    "translation": "%s updated the channel header to: %s"
+    "translation": "%s 已更新頻道標題為：%s"
   },
   {
     "id": "api.channel.post_user_add_remove_message_and_forget.error",
-    "translation": "Failed to post join/leave message %v"
+    "translation": "張貼加入/離開訊息 %v 失敗"
   },
   {
     "id": "api.channel.remove_member.permissions.app_error",
