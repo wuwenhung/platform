@@ -997,7 +997,7 @@
   },
   {
     "id": "api.team.export_team.admin.app_error",
-    "translation": "Only a team admin can export data."
+    "translation": "只有團隊管理員可以匯出資料"
   },
   {
     "id": "api.team.import_team.admin.app_error",
